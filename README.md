@@ -7,7 +7,7 @@ Requires an OpenAI api key with tokens to use.
 
 # Install
 ```
-git clone Suspence00/oai-functiondemo
+git clone https://github.com/Suspence00/oai-functiondemo
 cd oai-functiondemo
 npm install
 ```
