@@ -76,3 +76,28 @@ body {
 .animate-fade-in {
   animation: fade-in 0.3s ease-in-out;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #e5e7eb;
+  padding: 0.25rem 0.5rem;
+}
+
+thead {
+  background-color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  th,
+  td {
+    border-color: #44444a;
+  }
+  thead {
+    background-color: #232326;
+  }
+}
