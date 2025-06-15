@@ -1,9 +1,9 @@
-# Open AI - Tools Demo
-A demo of Open Ai functionality utilizing vercel and next.js.
+# OpenAI - Tools Demo
+A demo of OpenAI functionality utilizing Vercel and Next.js.
 
 implements `streamText` and `tools` from Vercel's ai sdk and with OpenAI model `gpt-3.5-turbo`.
 
-Requires an OpenAI api key with tokens to use.
+Requires an OpenAI API key with tokens to use.
 
 # Install
 ```
@@ -14,4 +14,4 @@ npm install
 
 # Usage
 `npm run dev`
-You will be prompted to enter your OpenAi API key on first run
+You will be prompted to enter your OpenAI API key on first run.
