@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import clsx from "clsx";
 import { LoadingCircle, SendIcon } from "./icons";
@@ -27,7 +27,7 @@ export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { messages, input, setInput, handleSubmit, isLoading } = useChat({
+  const { messages, setMessages, input, setInput, handleSubmit, isLoading } = useChat({
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
@@ -63,14 +63,23 @@ export default function Chat() {
     <main className="flex flex-col items-center justify-between pb-40">
       {/* Removed Vercel and Github links from the top corners */}
       {messages.length > 0 ? (
-        messages.map((message, i) => (
-          <div
-            key={i}
-            className={clsx(
-              "flex w-full items-center justify-center border-b border-gray-200 py-8",
-              message.role === "user" ? "bg-white" : "bg-gray-100",
-            )}
-          >
+        <React.Fragment>
+          <div className="w-full max-w-screen-md self-start px-5 sm:px-0">
+            <button
+              onClick={() => setMessages([])}
+              className="my-4 flex items-center text-sm text-gray-500 hover:text-black"
+            >
+              <ChevronLeft className="mr-1 h-4 w-4" /> Home
+            </button>
+          </div>
+          {messages.map((message, i) => (
+            <div
+              key={i}
+              className={clsx(
+                "flex w-full items-center justify-center border-b border-gray-200 py-8",
+                message.role === "user" ? "bg-white" : "bg-gray-100",
+              )}
+            >
             <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
               <div
                 className={clsx(
@@ -99,7 +108,8 @@ export default function Chat() {
               </div>
             </div>
           </div>
-        ))
+          ))
+        </React.Fragment>
       ) : (
         <div className="border-gray-200 sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
           <div className="flex flex-col space-y-4 p-7 sm:p-10">
