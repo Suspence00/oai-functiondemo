@@ -123,7 +123,7 @@ export const tools = {
         heightImperial, // feet and inches
         weight: data.weight,
         species: data.species?.name,
-        favoriteFood: 'Nathans hot dogs',
+        favoriteFood: "Nathan's hot dogs",
       };
     },
   }),
