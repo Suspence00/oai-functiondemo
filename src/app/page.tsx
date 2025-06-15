@@ -37,12 +37,24 @@ export default function Chat() {
   });
 
   const [exampleIndex, setExampleIndex] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
+  const startInterval = () => {
+    intervalRef.current = setInterval(() => {
       setExampleIndex((i) => (i + 1) % examples.length);
     }, 5000);
-    return () => clearInterval(interval);
+  };
+
+  const restartInterval = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    startInterval();
+  };
+
+  useEffect(() => {
+    startInterval();
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   const disabled = isLoading || input.length === 0;
@@ -212,11 +224,12 @@ export default function Chat() {
           <div className="flex flex-col space-y-4 border-t border-gray-200 bg-gray-50 p-7 sm:p-10">
             <div className="flex items-center justify-center space-x-2">
               <button
-                onClick={() =>
+                onClick={() => {
                   setExampleIndex(
                     (exampleIndex - 1 + examples.length) % examples.length
-                  )
-                }
+                  );
+                  restartInterval();
+                }}
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Previous example"
               >
@@ -224,7 +237,7 @@ export default function Chat() {
               </button>
               <button
                 key={exampleIndex}
-                className="rounded-md border border-gray-200 bg-white px-5 py-3 text-left text-sm text-gray-500 transition-all duration-75 hover:border-black hover:text-gray-700 active:bg-gray-50"
+                className="animate-fade-in rounded-md border border-gray-200 bg-white px-5 py-3 text-left text-sm text-gray-500 transition-all duration-75 hover:border-black hover:text-gray-700 active:bg-gray-50"
                 onClick={() => {
                   setInput(examples[exampleIndex]);
                   inputRef.current?.focus();
@@ -233,9 +246,10 @@ export default function Chat() {
                 {examples[exampleIndex]}
               </button>
               <button
-                onClick={() =>
-                  setExampleIndex((exampleIndex + 1) % examples.length)
-                }
+                onClick={() => {
+                  setExampleIndex((exampleIndex + 1) % examples.length);
+                  restartInterval();
+                }}
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Next example"
               >
