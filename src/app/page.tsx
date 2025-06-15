@@ -8,6 +8,7 @@ import { Bot, User, ChevronLeft, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
+import { ToolCallType, getLatestToolUsage } from "./utils";
 
 const examples = [
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
@@ -23,9 +24,12 @@ const examples = [
   "Show me the top games on Steam"
 ];
 
+
 export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [toolCalls, setToolCalls] = useState<Array<ToolCallType>>([]);
+  const messageNumRef = useRef(0); 
 
   const {
     messages,
@@ -63,6 +67,21 @@ export default function Chat() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    const toolUsage = getLatestToolUsage(messages);
+    if(toolUsage && messages.length > messageNumRef.current) {
+      messageNumRef.current = messages.length;
+      setToolCalls(prev => [...prev, toolUsage]);
+      toast.info(
+        <>
+          <div>Tool Used: {toolUsage.name}</div>
+          <div>Tool Args: {JSON.stringify(toolUsage.args)}</div>
+          <div>Timestamp: {toolUsage.timeStamp.toString()}</div>
+        </>
+      )
+    }
+  }, [messages]);
 
   const disabled = isLoading || input.length === 0;
 
