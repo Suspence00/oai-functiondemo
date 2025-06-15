@@ -14,8 +14,45 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #18181b; /* improved dark background for contrast */
+    --foreground: #f4f4f5; /* lighter foreground for better readability */
+  }
+  body {
+    background: var(--background) !important;
+    color: var(--foreground) !important;
+  }
+  a, a:visited {
+    color: #93c5fd; /* light blue for links in dark mode */
+  }
+  ::selection {
+    background: #2563eb;
+    color: #f4f4f5;
+  }
+  .prose, .text-black, .text-gray-500, .text-gray-400, .text-gray-700, .border-gray-200, .bg-white, .bg-gray-100, .bg-gray-50 {
+    color: var(--foreground) !important;
+    background: transparent !important;
+    border-color: #27272a !important;
+  }
+  .bg-white, .bg-gray-100, .bg-gray-50 {
+    background: #232326 !important;
+  }
+  .text-black {
+    color: #f4f4f5 !important;
+  }
+  .text-gray-500, .text-gray-700, .text-gray-400 {
+    color: #d4d4d8 !important;
+  }
+  /* Ensure suggestion boxes have visible borders in dark mode */
+  .border-gray-200 {
+    border-color: #44444a !important;
+  }
+  .rounded-md, .rounded-lg, .rounded-xl {
+    box-shadow: 0 2px 8px 0 #00000040;
+    border-width: 1px !important;
+  }
+  /* Fix background gradient for dark mode */
+  .bg-gradient-to-b.from-transparent.via-gray-100.to-gray-100 {
+    background-image: linear-gradient(to bottom, transparent, #232326 60%, #18181b 100%) !important;
   }
 }
 
