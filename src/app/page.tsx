@@ -27,7 +27,14 @@ export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { messages, input, setInput, handleSubmit, isLoading } = useChat({
+  const {
+    messages,
+    input,
+    setInput,
+    handleSubmit,
+    isLoading,
+    setMessages,
+  } = useChat({
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
@@ -62,6 +69,14 @@ export default function Chat() {
   return (
     <main className="flex flex-col items-center justify-between pb-40">
       {/* Removed Vercel and Github links from the top corners */}
+      {messages.length > 0 && (
+        <button
+          onClick={() => setMessages([])}
+          className="mb-4 self-start rounded-md border border-gray-200 bg-white px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+        >
+          ← Home
+        </button>
+      )}
       {messages.length > 0 ? (
         messages.map((message, i) => (
           <div
