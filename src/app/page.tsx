@@ -14,7 +14,13 @@ const examples = [
   "Summarize the comments in the top hacker news story.",
   "How tall is Metapod?",
   "Tell me a joke",
-  "Tell me the name of a random magic card"
+  "Tell me the name of a random magic card",
+  "Give me a random cat fact",
+  "Show me a random dog picture",
+  "Share some advice",
+  "Suggest a fun activity",
+  "Tell me a random number trivia fact",
+  "Show me the top games on Steam"
 ];
 
 export default function Chat() {
@@ -129,6 +135,66 @@ export default function Chat() {
                     className="font-medium underline underline-offset-4 transition-colors hover:text-black"
                   >
                     scryfall API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://catfact.ninja"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Cat Facts API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://random.dog/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    random.dog API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://api.adviceslip.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Advice Slip API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.boredapi.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Bored API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="http://numbersapi.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Numbers API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://steamspy.com/api.php"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    SteamSpy API
                   </a>
                 </li>
               </ul>

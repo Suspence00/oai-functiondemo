@@ -159,6 +159,76 @@ export const tools = {
     },
   }),
 
+  get_random_cat_fact: tool({
+    description: 'Get a random cat fact.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('https://catfact.ninja/fact');
+      if (!res.ok) {
+        throw new Error('Failed to fetch cat fact');
+      }
+      const data = await res.json();
+      console.log('Cat fact fetched', data);
+      return { fact: data.fact };
+    },
+  }),
+
+  get_random_dog_image: tool({
+    description: 'Get a random dog image URL.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('https://random.dog/woof.json');
+      if (!res.ok) {
+        throw new Error('Failed to fetch dog image');
+      }
+      const data = await res.json();
+      console.log('Dog image fetched', data);
+      return { url: data.url };
+    },
+  }),
+
+  get_random_advice: tool({
+    description: 'Get a random piece of advice.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('https://api.adviceslip.com/advice');
+      if (!res.ok) {
+        throw new Error('Failed to fetch advice');
+      }
+      const data = await res.json();
+      console.log('Advice fetched', data);
+      return { advice: data.slip.advice };
+    },
+  }),
+
+  get_random_activity: tool({
+    description: 'Get a random activity suggestion.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('https://www.boredapi.com/api/activity');
+      if (!res.ok) {
+        throw new Error('Failed to fetch activity');
+      }
+      const data = await res.json();
+      console.log('Activity fetched', data);
+      return data;
+    },
+  }),
+
+  get_number_trivia: tool({
+    description: 'Get a random number trivia fact.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('http://numbersapi.com/random/trivia?json');
+      if (!res.ok) {
+        throw new Error('Failed to fetch number trivia');
+      }
+      const data = await res.json();
+      console.log('Number trivia fetched', data);
+      return { number: data.number, text: data.text };
+    },
+  }),
+
   get_steamspy_data: tool({
     description: 'Query the SteamSpy API for statistics about Steam games.',
     parameters: z.object({
