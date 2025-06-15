@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import { Fragment, useRef, useState, useEffect } from "react";
 import { useChat } from "@ai-sdk/react";
 import clsx from "clsx";
 import { LoadingCircle, SendIcon } from "./icons";
@@ -63,7 +63,7 @@ export default function Chat() {
     <main className="flex flex-col items-center justify-between pb-40">
       {/* Removed Vercel and Github links from the top corners */}
       {messages.length > 0 ? (
-        <React.Fragment>
+        <Fragment>
           <div className="w-full max-w-screen-md self-start px-5 sm:px-0">
             <button
               onClick={() => setMessages([])}
@@ -72,44 +72,42 @@ export default function Chat() {
               <ChevronLeft className="mr-1 h-4 w-4" /> Home
             </button>
           </div>
-          {messages.map((message, i) => (
-            <div
-              key={i}
-              className={clsx(
-                "flex w-full items-center justify-center border-b border-gray-200 py-8",
-                message.role === "user" ? "bg-white" : "bg-gray-100",
-              )}
-            >
-            <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
+          {messages.map((message, i) => {
+            return (
               <div
+                key={i}
                 className={clsx(
-                  "p-1.5 text-white",
-                  message.role === "assistant" ? "bg-green-500" : "bg-black",
+                  "flex w-full items-center justify-center border-b border-gray-200 py-8",
+                  message.role === "user" ? "bg-white" : "bg-gray-100",
                 )}
               >
-                {message.role === "user" ? (
-                  <User width={20} />
-                ) : (
-                  <Bot width={20} />
-                )}
+                <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
+                  <div
+                    className={clsx(
+                      "p-1.5 text-white",
+                      message.role === "assistant" ? "bg-green-500" : "bg-black",
+                    )}
+                  >
+                    {message.role === "user" ? <User width={20} /> : <Bot width={20} />}
+                  </div>
+                  <div className="prose mt-1 w-full break-words prose-p:leading-relaxed">
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={{
+                        // open links in new tab
+                        a: (props) => (
+                          <a {...props} target="_blank" rel="noopener noreferrer" />
+                        ),
+                      }}
+                    >
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                </div>
               </div>
-              <div className="prose mt-1 w-full break-words prose-p:leading-relaxed">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    // open links in new tab
-                    a: (props) => (
-                      <a {...props} target="_blank" rel="noopener noreferrer" />
-                    ),
-                  }}
-                >
-                  {message.content}
-                </ReactMarkdown>
-              </div>
-            </div>
-          </div>
-          ))
-        </React.Fragment>
+            );
+          })}
+        </Fragment>
       ) : (
         <div className="border-gray-200 sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
           <div className="flex flex-col space-y-4 p-7 sm:p-10">
