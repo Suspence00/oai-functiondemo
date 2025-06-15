@@ -158,4 +158,30 @@ export const tools = {
       return data;
     },
   }),
+
+  get_steamspy_data: tool({
+    description: 'Query the SteamSpy API for statistics about Steam games.',
+    parameters: z.object({
+      request: z.string().describe('SteamSpy request code such as appdetails or top100in2weeks'),
+      appid: z.number().optional().describe('Steam application ID for requests that require it'),
+      genre: z.string().optional().describe('Genre parameter for the genre request'),
+      tag: z.string().optional().describe('Tag parameter for the tag request'),
+      page: z.number().optional().describe('Page number for the all request'),
+    }),
+    execute: async ({ request, appid, genre, tag, page }) => {
+      const params = new URLSearchParams({ request });
+      if (appid !== undefined) params.set('appid', appid.toString());
+      if (genre !== undefined) params.set('genre', genre);
+      if (tag !== undefined) params.set('tag', tag);
+      if (page !== undefined) params.set('page', page.toString());
+
+      const res = await fetch(`https://steamspy.com/api.php?${params.toString()}`);
+      if (!res.ok) {
+        throw new Error('Failed to fetch SteamSpy data');
+      }
+      const data = await res.json();
+      console.log('SteamSpy data fetched', data);
+      return data;
+    },
+  }),
 };
