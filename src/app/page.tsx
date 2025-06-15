@@ -92,6 +92,21 @@ export default function Chat() {
                     a: (props) => (
                       <a {...props} target="_blank" rel="noopener noreferrer" />
                     ),
+                    table: (props) => (
+                      <table
+                        className="w-full border-collapse overflow-auto text-left"
+                        {...props}
+                      />
+                    ),
+                    th: (props) => (
+                      <th
+                        className="border px-2 py-1 font-semibold bg-gray-50 dark:bg-gray-800"
+                        {...props}
+                      />
+                    ),
+                    td: (props) => (
+                      <td className="border px-2 py-1" {...props} />
+                    ),
                   }}
                 >
                   {message.content}
