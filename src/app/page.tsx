@@ -1,103 +1,255 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useRef } from "react";
+import { useChat } from "@ai-sdk/react";
+import clsx from "clsx";
+import { VercelIcon, GithubIcon, LoadingCircle, SendIcon } from "./icons";
+import { Bot, User } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { toast } from "sonner";
+
+const examples = [
+  "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
+  "Summarize the comments in the top hacker news story.",
+  "How tall is Metapod?",
+  "Tell me a joke",
+  "Tell me the name of a random magic card"
+];
+
+export default function Chat() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const { messages, input, setInput, handleSubmit, isLoading } = useChat({
+    onResponse: (response) => {
+      if (response.status === 429) {
+        toast.error("You have reached your request limit for the day.");
+        return;
+      }
+    },
+  });
+
+  const disabled = isLoading || input.length === 0;
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main className="flex flex-col items-center justify-between pb-40">
+      <div className="absolute top-5 hidden w-full justify-between px-5 sm:flex">
+        <a
+          href="/deploy"
+          target="_blank"
+          className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto"
+        >
+          <VercelIcon />
+        </a>
+        <a
+          href="/github"
+          target="_blank"
+          className="rounded-lg p-2 transition-colors duration-200 hover:bg-stone-100 sm:bottom-auto"
+        >
+          <GithubIcon />
+        </a>
+      </div>
+      {messages.length > 0 ? (
+        messages.map((message, i) => (
+          <div
+            key={i}
+            className={clsx(
+              "flex w-full items-center justify-center border-b border-gray-200 py-8",
+              message.role === "user" ? "bg-white" : "bg-gray-100",
+            )}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <div className="flex w-full max-w-screen-md items-start space-x-4 px-5 sm:px-0">
+              <div
+                className={clsx(
+                  "p-1.5 text-white",
+                  message.role === "assistant" ? "bg-green-500" : "bg-black",
+                )}
+              >
+                {message.role === "user" ? (
+                  <User width={20} />
+                ) : (
+                  <Bot width={20} />
+                )}
+              </div>
+              <div className="prose mt-1 w-full break-words prose-p:leading-relaxed">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={{
+                    // open links in new tab
+                    a: (props) => (
+                      <a {...props} target="_blank" rel="noopener noreferrer" />
+                    ),
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
+              </div>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="border-gray-200sm:mx-0 mx-5 mt-20 max-w-screen-md rounded-md border sm:w-full">
+          <div className="flex flex-col space-y-4 p-7 sm:p-10">
+            <h1 className="text-lg font-semibold text-black">
+              Welcome to Bobly!
+            </h1>
+            <div className="text-gray-500">
+              AI chatbot that uses OpenAI tool integration and{" "}
+              <a
+                href="https://sdk.vercel.ai/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+              >
+                Vercel AI SDK
+              </a>{" "}
+              to interact with:
+              <ul>
+                <li>
+                  <a
+                    href="https://github.com/HackerNews/API"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    Hacker News API
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://pokeapi.co/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    PokeAPI
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://teehee.dev/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    teehee.dev
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://scryfall.com/docs/api"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    scryfall API
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="flex flex-col space-y-4 border-t border-gray-200 bg-gray-50 p-7 sm:p-10">
+            {examples.map((example, i) => (
+              <button
+                key={i}
+                className="rounded-md border border-gray-200 bg-white px-5 py-3 text-left text-sm text-gray-500 transition-all duration-75 hover:border-black hover:text-gray-700 active:bg-gray-50"
+                onClick={() => {
+                  setInput(example);
+                  inputRef.current?.focus();
+                }}
+              >
+                {example}
+              </button>
+            ))}
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+      )}
+      <div className="fixed bottom-0 flex w-full flex-col items-center space-y-3 bg-gradient-to-b from-transparent via-gray-100 to-gray-100 p-5 pb-3 sm:px-0">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="relative w-full max-w-screen-md rounded-xl border border-gray-200 bg-white px-4 pb-2 pt-3 shadow-lg sm:pb-3 sm:pt-4"
         >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
+          <textarea
+            ref={inputRef}
+            tabIndex={0}
+            required
+            rows={1}
+            autoFocus
+            placeholder="Send a message"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                formRef.current?.requestSubmit();
+                e.preventDefault();
+              }
+            }}
+            spellCheck={false}
+            className="w-full pr-10 focus:outline-none"
           />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+          <button
+            className={clsx(
+              "absolute inset-y-0 right-3 my-auto flex h-8 w-8 items-center justify-center rounded-md transition-all",
+              disabled
+                ? "cursor-not-allowed bg-white"
+                : "bg-green-500 hover:bg-green-600",
+            )}
+            disabled={disabled}
+          >
+            {isLoading ? (
+              <LoadingCircle />
+            ) : (
+              <SendIcon
+                className={clsx(
+                  "h-4 w-4",
+                  input.length === 0 ? "text-gray-300" : "text-white",
+                )}
+              />
+            )}
+          </button>
+        </form>
+        <p className="text-center text-xs text-gray-400">
+          Built with{" "}
+          <a
+            href="https://platform.openai.com/docs/guides/gpt/function-calling"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-black"
+          >
+            OpenAI Functions
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://sdk.vercel.ai/docs"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-black"
+          >
+            Vercel AI SDK
+          </a>
+          .{" "}
+          <a
+            href="https://github.com/steven-tey/chathn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-black"
+          >
+            View the repo
+          </a>{" "}
+          or{" "}
+          <a
+            href="https://vercel.com/templates/next.js/chathn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition-colors hover:text-black"
+          >
+            deploy your own
+          </a>
+          .
+        </p>
+      </div>
+    </main>
   );
 }
