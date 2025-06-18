@@ -101,3 +101,42 @@ thead {
     background-color: #232326;
   }
 }
+
+@keyframes icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+.icon-bounce {
+  animation: icon-bounce 0.5s ease;
+}
+
+@keyframes send-wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(15deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.send-icon:hover {
+  animation: send-wiggle 0.5s ease;
+}
+
+.chevron:hover {
+  animation: icon-bounce 0.5s ease;
+}
