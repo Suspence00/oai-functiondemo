@@ -15,6 +15,7 @@ const examples = [
   "Summarize the comments in the top hacker news story.",
   "How tall is Metapod?",
   "Tell me a joke",
+  "Tell me a dad joke",
   "Tell me the name of a random magic card",
   "Give me a random cat fact",
   "Show me a random dog picture",
@@ -199,6 +200,16 @@ export default function Chat() {
                     className="font-medium underline underline-offset-4 transition-colors hover:text-black"
                   >
                     teehee.dev
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://icanhazdadjoke.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium underline underline-offset-4 transition-colors hover:text-black"
+                  >
+                    icanhazdadjoke
                   </a>
                 </li>
                 <li>

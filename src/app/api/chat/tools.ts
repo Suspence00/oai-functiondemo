@@ -239,6 +239,7 @@ export const tools = {
         throw new Error('Failed to fetch dad joke');
       }
       const data = await res.json();
+        console.log("Dad joke fetched", data);
       const result = { joke: data.joke };
       return {
         ...result,
