@@ -8,7 +8,7 @@ import { Bot, User, ChevronLeft, ChevronRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { toast } from "sonner";
-import { getLatestToolUsage } from "./utils";
+import { ToolCallType, getLatestToolUsage } from "./utils";
 
 const examples = [
   "Get me the top 5 stories on Hacker News in markdown table format. Use columns like title, link, score, and comments.",
@@ -29,6 +29,7 @@ export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const messageNumRef = useRef(0);
+  const [toolCalls, setToolCalls] = useState<Array<ToolCallType>>([]);
 
   const {
     messages,
@@ -68,9 +69,14 @@ export default function Chat() {
   }, []);
 
   useEffect(() => {
+    console.debug("toolCalls", toolCalls);
+  }, [toolCalls]);
+
+  useEffect(() => {
     const toolUsage = getLatestToolUsage(messages);
     if(toolUsage && messages.length > messageNumRef.current) {
       messageNumRef.current = messages.length;
+      setToolCalls(prev => [...prev, toolUsage]);
       toast.info(
         <>
           <div>Tool Used: {toolUsage.name}</div>
@@ -111,9 +117,9 @@ export default function Chat() {
                 )}
               >
                 {message.role === "user" ? (
-                  <User width={20} className="icon-bounce" />
+                  <User width={20} className="icon-bounce inline-block" />
                 ) : (
-                  <Bot width={20} className="icon-bounce" />
+                  <Bot width={20} className="icon-bounce inline-block" />
                 )}
               </div>
               <div className="prose mt-1 w-full break-words prose-p:leading-relaxed">
@@ -280,7 +286,7 @@ export default function Chat() {
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Previous example"
               >
-                <ChevronLeft className="h-5 w-5 chevron" />
+                <ChevronLeft className="h-5 w-5 chevron inline-block" />
               </button>
               <button
                 key={exampleIndex}
@@ -300,7 +306,7 @@ export default function Chat() {
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Next example"
               >
-                <ChevronRight className="h-5 w-5 chevron" />
+                <ChevronRight className="h-5 w-5 chevron inline-block" />
               </button>
             </div>
           </div>
@@ -345,7 +351,7 @@ export default function Chat() {
             ) : (
               <SendIcon
                 className={clsx(
-                  "h-4 w-4 send-icon",
+                  "h-4 w-4 send-icon inline-block",
                   input.length === 0 ? "text-gray-300" : "text-white",
                 )}
               />

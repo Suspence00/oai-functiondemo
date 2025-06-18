@@ -112,6 +112,7 @@ thead {
 }
 
 .icon-bounce {
+  display: inline-block;
   animation: icon-bounce 0.5s ease;
 }
 
@@ -131,6 +132,11 @@ thead {
   100% {
     transform: rotate(0deg);
   }
+}
+
+
+.send-icon {
+  display: inline-block;
 }
 
 .send-icon:hover {
