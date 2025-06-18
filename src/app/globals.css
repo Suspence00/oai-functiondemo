@@ -113,7 +113,7 @@ thead {
 
 .icon-bounce {
   display: inline-block;
-  animation: icon-bounce 0.5s ease;
+  animation: icon-bounce 1s ease;
 }
 
 @keyframes send-wiggle {
@@ -144,5 +144,5 @@ thead {
 }
 
 .chevron:hover {
-  animation: icon-bounce 0.5s ease;
+  animation: icon-bounce 1s ease;
 }
