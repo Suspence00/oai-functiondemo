@@ -28,8 +28,8 @@ const examples = [
 export default function Chat() {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const messageNumRef = useRef(0);
   const [toolCalls, setToolCalls] = useState<Array<ToolCallType>>([]);
-  const messageNumRef = useRef(0); 
 
   const {
     messages,
@@ -67,6 +67,10 @@ export default function Chat() {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    console.debug("toolCalls", toolCalls);
+  }, [toolCalls]);
 
   useEffect(() => {
     const toolUsage = getLatestToolUsage(messages);
@@ -113,9 +117,9 @@ export default function Chat() {
                 )}
               >
                 {message.role === "user" ? (
-                  <User width={20} />
+                  <User width={20} className="icon-bounce inline-block" />
                 ) : (
-                  <Bot width={20} />
+                  <Bot width={20} className="icon-bounce inline-block" />
                 )}
               </div>
               <div className="prose mt-1 w-full break-words prose-p:leading-relaxed">
@@ -282,7 +286,7 @@ export default function Chat() {
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Previous example"
               >
-                <ChevronLeft className="h-5 w-5" />
+                <ChevronLeft className="h-5 w-5 chevron inline-block" />
               </button>
               <button
                 key={exampleIndex}
@@ -302,7 +306,7 @@ export default function Chat() {
                 className="rounded-full p-2 text-gray-500 hover:text-black"
                 aria-label="Next example"
               >
-                <ChevronRight className="h-5 w-5" />
+                <ChevronRight className="h-5 w-5 chevron inline-block" />
               </button>
             </div>
           </div>
@@ -347,7 +351,7 @@ export default function Chat() {
             ) : (
               <SendIcon
                 className={clsx(
-                  "h-4 w-4",
+                  "h-4 w-4 send-icon inline-block",
                   input.length === 0 ? "text-gray-300" : "text-white",
                 )}
               />
