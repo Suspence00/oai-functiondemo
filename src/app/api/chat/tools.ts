@@ -228,6 +228,25 @@ export const tools = {
     },
   }),
 
+  get_dad_joke: tool({
+    description: 'Get a random dad joke from icanhazdadjoke.com.',
+    parameters: z.object({}),
+    execute: async () => {
+      const res = await fetch('https://icanhazdadjoke.com/', {
+        headers: { Accept: 'application/json' },
+      });
+      if (!res.ok) {
+        throw new Error('Failed to fetch dad joke');
+      }
+      const data = await res.json();
+      const result = { joke: data.joke };
+      return {
+        ...result,
+        markdownTable: objectToMarkdownTable(result),
+      };
+    },
+  }),
+
   get_random_cat_fact: tool({
     description: 'Get a random cat fact.',
     parameters: z.object({}),
