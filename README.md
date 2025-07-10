@@ -10,6 +10,7 @@ This demo integrates several free APIs that do not require API keys:
 - [Hacker News API](https://github.com/HackerNews/API) – fetch top stories and comments
 - [PokeAPI](https://pokeapi.co/) – get Pokémon information
 - [teehee.dev](https://teehee.dev/) – random jokes
+- [icanhazdadjoke.com](https://icanhazdadjoke.com/) – random dad jokes
 - [Scryfall](https://scryfall.com/docs/api) – random Magic: The Gathering card
 - [Cat Facts](https://catfact.ninja/) – random cat facts
 - [random.dog](https://random.dog/) – random dog images
