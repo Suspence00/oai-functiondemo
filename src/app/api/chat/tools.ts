@@ -2,13 +2,13 @@ import { tool } from 'ai';
 import { z } from 'zod';
 
 function escapeMarkdown(value: unknown) {
-  return String(value).replace(/\|/g, '\\|').replace(/\n/g, ' ');
+  return String(value).replace(/\\/g, '\\\\').replace(/\|/g, '\\|').replace(/[\r\n]/g, ' ');
 }
 
 function arrayToMarkdownTable(items: Record<string, unknown>[]) {
   if (items.length === 0) return '';
   const headers = Object.keys(items[0]);
-  const headerRow = `| ${headers.join(' | ')} |`;
+  const headerRow = `| ${headers.map(escapeMarkdown).join(' | ')} |`;
   const separatorRow = `| ${headers.map(() => '---').join(' | ')} |`;
   const rows = items.map((item) =>
     `| ${headers
