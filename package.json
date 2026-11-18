@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",
-    "ai": "^4.3.16",
+    "ai": "^7.0.176",
     "clsx": "^2.1.1",
     "lucide-react": "^0.515.0",
     "next": "15.5.29",
